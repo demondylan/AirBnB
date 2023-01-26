@@ -10,10 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userid: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        reference: { model: "Users"}
       },
       spotid: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        reference: { model: "Spots"}
       },
       review: {
         type: Sequelize.STRING
@@ -24,12 +26,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultvalue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultvalue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

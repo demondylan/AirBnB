@@ -9,34 +9,34 @@ module.exports = {
     options.tableName = 'SpotImages';
     return queryInterface.bulkInsert(options, [
       {
-        "id": 1,
-        "url": "www.google.com",
-        "preview": true
+        spotid: 1,
+        url: "www.google.com",
+        preview: true
       },
       {
-        "id": 1,
-        "url": "www.images.com",
-        "preview": false
+        spotid: 1,
+        url: "www.images.com",
+        preview: false
       },
       {
-        "id": 2,
-        "url": "www.youtube.com",
-        "preview": true
+        spotid: 2,
+        url: "www.youtube.com",
+        preview: true
       },
       {
-        "id": 2,
-        "url": "www.golf.com",
-        "preview": false
+        spotid: 2,
+        url: "www.golf.com",
+        preview: false
       },
       {
-        "id": 3,
-        "url": "www.lost.com",
-        "preview": false
+        spotid: 3,
+        url: "www.lost.com",
+        preview: false
       },
       {
-        "id": 3,
-        "url": "www.dogs.com",
-        "preview": true
+        spotid: 3,
+        url: "www.dogs.com",
+        preview: true
       },
       
     ], {});

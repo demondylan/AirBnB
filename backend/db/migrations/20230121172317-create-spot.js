@@ -10,42 +10,65 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       ownerid: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        reference: { model: "Users"}
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       city: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       state: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       country: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       lat: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    validate: {
+      min: -90,
+      max: 90
+    }
       },
       lng: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+        validate: {
+          min: -180,
+          max: 180
+        }
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(),
+        allowNull: false,
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      previewImage: {
+        type: Sequelize.STRING
       }
     });
   },
