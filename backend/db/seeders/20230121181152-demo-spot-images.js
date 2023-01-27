@@ -43,6 +43,6 @@ module.exports = {
   },
     down: async (queryInterface, Sequelize) => {
       const Op = Sequelize.Op;
-      return queryInterface.bulkDelete('SpotImages', null, {})
+      return queryInterface.bulkDelete(options, null, {})
     }
   };
