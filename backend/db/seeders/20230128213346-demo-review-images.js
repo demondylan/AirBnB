@@ -28,6 +28,7 @@ module.exports = {
     ], {});
   },
   down: async (queryInterface, Sequelize) => {
+    options.tableName = "ReviewImages"
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, null, {})
   }
