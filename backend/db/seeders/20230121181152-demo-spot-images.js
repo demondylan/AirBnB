@@ -38,11 +38,11 @@ module.exports = {
         url: "www.dogs.com",
         preview: true
       },
-      
+
     ], {});
   },
-    down: async (queryInterface, Sequelize) => {
-      const Op = Sequelize.Op;
-      return queryInterface.bulkDelete(options, null, {})
-    }
-  };
+  down: async (queryInterface, Sequelize) => {
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, null, {})
+  }
+};

@@ -15,7 +15,7 @@ module.exports = {
       },
       ownerid: {
         type: Sequelize.INTEGER,
-        reference: { model: "Users"}
+        reference: { model: "Users" }
       },
       address: {
         type: Sequelize.STRING,
@@ -64,7 +64,7 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     },
-    options
+      options
     );
   },
   async down(queryInterface, Sequelize) {

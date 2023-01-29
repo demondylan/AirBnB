@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATEONLY
   }, {
     sequelize,
-    modelName: 'Booking',
+    modelName: 'Booking'
   });
   return Booking;
 };

@@ -10,15 +10,15 @@ module.exports = {
     options.tableName = 'Bookings';
     return queryInterface.bulkInsert(options, [
       {
-   spotid: 1,
-   userid: 1,
-   startDate: '1996-01-22',
-   endDate: '1998-01-22'
+        spotid: 1,
+        userid: 1,
+        startDate: '1996-01-22',
+        endDate: '1998-01-22'
       },
       {
         spotid: 2,
         userid: 2,
-       startDate: '2001-05-22',
+        startDate: '2001-05-22',
         endDate: '2001-05-30'
       },
       {
@@ -27,7 +27,7 @@ module.exports = {
         startDate: '2001-07-22',
         endDate: '2001-08-30'
       }
-      
+
     ], {});
   },
   down: async (queryInterface, Sequelize) => {

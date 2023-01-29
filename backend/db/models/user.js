@@ -50,9 +50,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Booking, {
         foreignKey: "userid"
       })
-     User.hasMany(models.Review, {
-      foreignKey: "userid"
-    })
+      User.hasMany(models.Review, {
+        foreignKey: "userid"
+      })
     }
   };
 

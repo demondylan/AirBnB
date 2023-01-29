@@ -179,8 +179,8 @@ router.get('/current', requireAuth, async (req, res) => {
         [sequelize.col("SpotImages.url"), "previewImage"]
       ]
 
-    
-      
+
+
     },
 
 

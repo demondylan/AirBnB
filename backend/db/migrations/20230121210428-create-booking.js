@@ -15,11 +15,11 @@ module.exports = {
       },
       spotid: {
         type: Sequelize.INTEGER,
-        reference: { model: "Spots"}
+        reference: { model: "Spots" }
       },
       userid: {
         type: Sequelize.INTEGER,
-        reference: { model: "Users"}
+        reference: { model: "Users" }
       },
       startDate: {
         type: Sequelize.DATEONLY
@@ -38,7 +38,7 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     },
-    options);
+      options);
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Bookings', options);
