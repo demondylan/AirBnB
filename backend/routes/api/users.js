@@ -55,7 +55,14 @@ router.post(
     async (req, res) => {
       const { firstName, lastName, email, password, username } = req.body;
       const user = await User.signup({ firstName, lastName, email, username, password });
-  
+      const sameEmail = await User.findOne({ where: { email: req.user.email } });
+      if (reviews != null) {
+        const err = new Error(`User already has an email for this account`);
+        err.status = 403;
+        err.title = "Review exists";
+        //  err.errors = ["Spot couldn't be found"];
+        return next(err);
+      }
       await setTokenCookie(res, user);
   
       return res.json(

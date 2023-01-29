@@ -34,20 +34,12 @@ module.exports = {
         allowNull: false
       },
       lat: {
-        type: Sequelize.DECIMAL,
-        allowNull: false,
-    validate: {
-      min: -90,
-      max: 90
-    }
+        type: Sequelize.FLOAT,
+        allowNull: false
       },
       lng: {
-        type: Sequelize.DECIMAL,
-        allowNull: false,
-        validate: {
-          min: -180,
-          max: 180
-        }
+        type: Sequelize.FLOAT,
+        allowNull: false
       },
       name: {
         type: Sequelize.STRING,
@@ -58,7 +50,7 @@ module.exports = {
         allowNull: false,
       },
       price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false
       },
       createdAt: {
@@ -70,9 +62,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      },
-      previewImage: {
-        type: Sequelize.STRING
       }
     },
     options

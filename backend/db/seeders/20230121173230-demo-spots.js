@@ -21,7 +21,6 @@ module.exports = {
       name: "App Academy",
       description: "Place where web developers are created",
       price: 123,
-      previewImage: "url1.com"
       },
       {
         ownerid: 2,
@@ -34,7 +33,6 @@ module.exports = {
         name: "Lost Lands",
         description: "Place where the developers stay",
         price: 250,
-        previewImage: "url2.com"
       },
       {
         ownerid: 3,
@@ -47,7 +45,6 @@ module.exports = {
         name: "Sweet Dreams",
         description: "Place where dreams are made",
         price: 350,
-      previewImage: "thisurllink.com"
       }
 
     ], {});

@@ -16,15 +16,24 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(models.User, {
         foreignKey: 'spotid'
       })
-      Review.hasMany(models.ReviewImage)
+      Review.hasMany(models.ReviewImage, {
+        foreignKey: "reviewid"
+      })
     }
   }
   Review.init({
     userid: DataTypes.INTEGER,
     spotid: DataTypes.INTEGER,
     review: DataTypes.STRING,
-    stars: DataTypes.INTEGER
-  }, {
+    stars: {
+      type: DataTypes.INTEGER,
+      validate: {
+        min: 1,
+        max: 5
+      }
+    }
+  },
+   {
     sequelize,
     modelName: 'Review',
   });

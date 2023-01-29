@@ -13,8 +13,6 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/spots', require('./routes/api/spots'));
-
 
 if (!isProduction) {
     // enable cors only in development

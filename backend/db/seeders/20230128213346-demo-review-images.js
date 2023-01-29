@@ -7,26 +7,23 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    options.tableName = 'Bookings';
+    options.tableName = 'ReviewImages';
     return queryInterface.bulkInsert(options, [
       {
-   spotid: 1,
-   userid: 1,
-   startDate: '1996-01-22',
-   endDate: '1998-01-22'
+        id: 1,
+   reviewid: 1,
+   url: "blah1"
       },
       {
-        spotid: 2,
-        userid: 2,
-       startDate: '2001-05-22',
-        endDate: '2001-05-30'
-      },
-      {
-        spotid: 3,
-        userid: 3,
-        startDate: '2001-07-22',
-        endDate: '2001-08-30'
-      }
+        id: 2,
+        reviewid: 2,
+        url: "blah2"
+           },
+           {
+            id: 3,
+            reviewid: 3,
+            url: "blah3"
+               }
       
     ], {});
   },

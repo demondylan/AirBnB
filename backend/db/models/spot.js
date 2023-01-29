@@ -44,20 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
       },
     lat: {
-      type: DataTypes.DECIMAL,
-      allowNull: false,
-      validate: {
-        min: -90,
-        max: 90
-      }
+      type: DataTypes.FLOAT,
+      allowNull: false
     },
     lng: {
-       type: DataTypes.DECIMAL,
-       allowNull: false,
-       validate: {
-        min: -180,
-        max: 180
-      }
+       type: DataTypes.FLOAT,
+       allowNull: false
     },
     name: {
     type: DataTypes.STRING,
@@ -71,10 +63,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
       },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false
-      },
-    previewImage: DataTypes.STRING
+      }
   }, {
     sequelize,
     modelName: 'Spot'

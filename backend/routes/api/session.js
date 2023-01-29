@@ -75,7 +75,7 @@ router.post(
 
   router.get(
     '/',
-    restoreUser,
+    restoreUser, 
     (req, res) => {
       const { user } = req;
       if (user) {

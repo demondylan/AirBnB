@@ -21,6 +21,22 @@ module.exports = {
         stars: 5,
       },
       {
+        userid: 2,
+        spotid: 2,
+        review: "Best Breakfast Around!",
+        stars: 5,
+      },      {
+        userid: 2,
+        spotid: 2,
+        review: "Best Breakfast Around!",
+        stars: 5,
+      },      {
+        userid: 2,
+        spotid: 2,
+        review: "Best Breakfast Around!",
+        stars: 5,
+      },
+      {
         userid: 3,
         spotid: 3,
         review: "Terrible Never Go Here!",
