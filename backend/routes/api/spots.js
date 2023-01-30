@@ -200,7 +200,7 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Spots: spots })
 })
 
-router.get('/:spotid', async (req, res, next) => {
+router.get('/:spotid', requireAuth, async (req, res, next) => {
   const id = req.params.spotid;
   const spots = await Spot.findByPk(id, {
     attributes: {
