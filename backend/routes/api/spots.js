@@ -183,7 +183,7 @@ router.get('/current', requireAuth, async (req, res) => {
   })
   for await (let spot of spots) {
     const reviews = await Review.findAll({
-             where: {spotId: spot.id}
+             where: {spotid: spot.id}
           })
     
           if (reviews.length) {
