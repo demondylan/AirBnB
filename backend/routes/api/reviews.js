@@ -47,7 +47,7 @@ router.get('/current', requireAuth, async (req, res) => {
 router.delete('/:reviewsId', async (req, res) => {
     const review = await Review.findByPk(req.params.reviewsId)
     if (!review) {
-        res.status(404).json({ message: "Review couldn't be found" })
+        res.status(404).json({ message: "Review couldn't be found", status: 404 })
     }
     await review.destroy()
     return res.json({ message: 'Successfully deleted' })
@@ -76,7 +76,7 @@ router.put('/:reviewsid', requireAuth, validateReview, async (req, res, next) =>
     const id = req.params.reviewsid;
     const reviews = await Review.findByPk(id)
     if (!reviews) {
-        res.status(404).json({ message: "Review couldn't be found" })
+        res.status(404).json({ message: "Review couldn't be found", status: 404 })
     }
 
     await reviews.update({
