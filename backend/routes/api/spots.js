@@ -218,6 +218,9 @@ router.get('/current', requireAuth, async (req, res) => {
 router.get('/:spotid', requireAuth, async (req, res, next) => {
   const id = req.params.spotid;
   const spots = await Spot.findByPk(id)
+  if (!spots) {
+    res.status(404).json({ message: "Spot couldn't be found" })
+  }
     const reviews = await Review.findAll({
              where: {spotid: id}
           })
@@ -249,9 +252,7 @@ router.get('/:spotid', requireAuth, async (req, res, next) => {
           }
     
 
-  if (!spots.id) {
-    res.status(404).json({ message: "Spot couldn't be found" })
-  }
+
 
   return res.json(spots)
 
