@@ -17,7 +17,7 @@ router.get('/current', requireAuth, async (req, res) => {
         include: [
             {
                 model: Spot,
-                attributes: ["id", "ownerid", "address", "city", "state", "country", "lat", "lng", "name", "price", "previewImage"],
+                attributes: ["id", "ownerid", "address", "city", "state", "country", "lat", "lng", "name", "price"],
                 subQuery: false,
             }
         ]

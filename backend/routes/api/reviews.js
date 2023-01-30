@@ -62,20 +62,8 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 
     const reviews = await Review.findByPk(reviewid)
     if (!reviews) {
-        const err = new Error(`Review couldn't be found`);
-        err.status = 404;
-        err.title = "Review id does not exist";
-        //  err.errors = ["Spot couldn't be found"];
-        return next(err);
+        res.status(403).json({ message: "User already has a review for this spot" })
     }
-
-    //   const count = await ReviewImage.count({where: {counting}})
-
-    /*   if (count >= 10) {
-         return res.status(403).json({ Message: "Maximum number of images for this resource was reached",
-         statusCode: 403
-     })
-       }*/
     const newImage = await ReviewImage.create({
         reviewid: reviewid,
         url
@@ -88,10 +76,7 @@ router.put('/:reviewsid', requireAuth, validateReview, async (req, res, next) =>
     const id = req.params.reviewsid;
     const reviews = await Review.findByPk(id)
     if (!reviews) {
-        const err = new Error(`Review couldn't be found`);
-        err.status = 404;
-        err.title = "Review id does not exist";
-        return next(err);
+        res.status(404).json({ message: "Review couldn't be found" })
     }
 
     await reviews.update({

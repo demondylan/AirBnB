@@ -55,8 +55,7 @@ const validateReview = [
 ];
 
 router.get('/', async (req, res) => {
-  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
-
+  let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query
   if (!page || Number.isNaN(page) || page > 10) { page = 1 }
   if (!size || Number.isNaN(size) || size > 20) { size = 20 }
   if (!minLat) { minLat = -90 }
@@ -67,58 +66,71 @@ router.get('/', async (req, res) => {
   if (!maxPrice) { maxPrice = 100000 }
   page = Number(page)
   size = Number(size)
+  console.log(page,size, "!!!!!!!!!!!!!")
   const spots = await Spot.findAll({
-    where: {
-      lat: { [Op.between]: [minLat, maxLat] },
-      lng: { [Op.between]: [minLng, maxLng] },
-      price: { [Op.between]: [minPrice, maxPrice] },
-    },
-    include: [
-      {
-        model: SpotImage
+      where: {
+          lat: { [Op.between]: [minLat, maxLat] },
+          lng: { [Op.between]: [minLng, maxLng] },
+          price: { [Op.between]: [minPrice, maxPrice] },
+      },
+/*
+      attributes: {
+          include: [[sequelize.fn('COALESCE', sequelize.fn('AVG',
+           sequelize.col('Reviews.stars')), 0), 'avgRating'],
+          [sequelize.fn('COALESCE', sequelize.col('SpotImages.url'),
+           sequelize.literal("'no image preview has been uploaded'")),
+            'previewImage']]
+            */
+          /*
+          COALESCE returns the first non null val
+          using to grab the star if there is only one review
+          then if more then one value finds the avg of the stars on the review table
+          passing 0 as a defult value then returnin the avg to the spots table
+         
+          */
+      //},
+      include: [{
+          model: Review,
       },
       {
-        model: Review
-      }
-    ]
-  })
-  console.log(spots[0])
-  spots.forEach(spot => {
-    spot.SpotImages.forEach(image => {
-      if (image.dataValues.preview) {
-        spot.dataValues.previewImage = image.url
-      } else {
-        spot.dataValues.previewImage = "no preview Image"
-      }
-      delete spot.dataValues.SpotImages
-      let sum = 0
-      if (spot.Reviews.length) {
-        spot.Reviews.forEach(review => {
-          sum += review.dataValues.stars
-        })
-        sum = sum / spot.Reviews.length
-        spot.dataValues.avgRating = sum
-      } else {
-        spot.dataValues.avgRating = sum
-      }
-      delete spot.dataValues.Reviews
-    })
-  })
+          model: SpotImage,
+      }],
+      //group: ['Spot.id', 'SpotImages.url'],
+      offset: (page - 1) * size ,
+      limit: size
+      })
+     spots.forEach(spot =>{
+      spot.SpotImages.forEach(image=>{
+          if (image.dataValues.preview){
+              spot.dataValues.previewImage = image.url
+          }else{
+              spot.dataValues.previewImage = "no preview Image"
+          }
+          delete spot.dataValues.SpotImages
+          let sum = 0
+          if (spot.Reviews.length){
+              spot.Reviews.forEach(review =>{
+              sum += review.dataValues.stars
+              })
+              sum = sum/spot.Reviews.length
+              spot.dataValues.avgRating = sum
+          }else{
+              spot.dataValues.avgRating = sum
+          }
+          delete spot.dataValues.Reviews
+      })
+     })
   res.json({
-    Spots: spots,
-    page,
-    size
-  })
+      Spots:spots,
+      page,
+      size
+})
 })
 router.get('/:spotsId/reviews', async (req, res, next) => {
   const id = req.params.spotsId;
   const spot = await Spot.findByPk(id)
-  if (spot === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+  if (!spot) {
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
   const reviews = await Review.findAll({
     where: {
@@ -143,12 +155,8 @@ router.get('/:spotsId/reviews', async (req, res, next) => {
 router.get('/:spotIdForBooking/bookings', async (req, res, next) => {
   const id = req.params.spotIdForBooking;
   const spot = await Spot.findByPk(id)
-  if (spot === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+  if (!spot) {
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
   const bookings = await Booking.findAll({
     where: {
@@ -233,13 +241,10 @@ router.get('/:spotid', requireAuth, async (req, res, next) => {
     ],
 
   })
-  if (spots.id === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+  if (!spots.id) {
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
+
   return res.json(spots)
 
 })
@@ -279,20 +284,12 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
   const { user, spotid, review, stars } = req.body
   const spots = await Spot.findByPk(id)
   if (spots === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+      res.status(404).json({ message: "Spot couldn't be found" })
   }
 
   const reviews = await Review.findOne({ where: { userid: req.user.id } });
   if (reviews != null) {
-    const err = new Error(`User already has a review for this spot`);
-    err.status = 403;
-    err.title = "Review exists";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+    res.status(403).json({ message: "Review exists" })
   }
 
   const newReview = await Review.create({
@@ -311,20 +308,13 @@ router.post('/:spotIdForBooking/bookings', requireAuth, async (req, res, next) =
   const { user, spotid, startDate, endDate } = req.body
   const spots = await Spot.findByPk(id)
   if (spots === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
 
   const bookings = await Booking.findOne({ where: { userid: req.user.id } });
   if (bookings != null) {
-    const err = new Error(`User already has a booking for this spot`);
-    err.status = 403;
-    err.title = "Booking exists";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+    res.status(403).json({ message: "Booking exists" })
+
   }
 
   const newBooking = await Booking.create({
@@ -343,12 +333,8 @@ router.post('/:spotsid/images', requireAuth, async (req, res, next) => {
 
 
   const spots = await Spot.findByPk(id)
-  if (spots === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+  if (!spots) {
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
   const newImage = await SpotImage.create({
     spotid: id,
@@ -363,12 +349,8 @@ router.post('/:spotsid/images', requireAuth, async (req, res, next) => {
 router.put('/:spotsid', requireAuth, async (req, res, next) => {
   const id = req.params.spotsid;
   const spots = await Spot.findByPk(id)
-  if (spots === null) {
-    const err = new Error(`Spot Id ${id} does not exist`);
-    err.status = 404;
-    err.title = "Spot couldn't be found";
-    //  err.errors = ["Spot couldn't be found"];
-    return next(err);
+  if (!spots) {
+    res.status(404).json({ message: "Spot couldn't be found" })
   }
 
   await spots.update({
