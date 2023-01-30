@@ -10,17 +10,14 @@ module.exports = {
     options.tableName = 'ReviewImages';
     return queryInterface.bulkInsert(options, [
       {
-        id: 1,
         reviewid: 1,
         url: "blah1"
       },
       {
-        id: 2,
         reviewid: 2,
         url: "blah2"
       },
       {
-        id: 3,
         reviewid: 3,
         url: "blah3"
       }
