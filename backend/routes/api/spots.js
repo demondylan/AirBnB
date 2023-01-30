@@ -175,72 +175,80 @@ router.get('/:spotIdForBooking/bookings', async (req, res, next) => {
 })
 
 router.get('/current', requireAuth, async (req, res) => {
+
   const spots = await Spot.findAll({
     where: {
       ownerid: req.user.id
-    },
-    attributes: {
-      include: [
-        [sequelize.fn("ROUND", sequelize.fn("AVG", sequelize.col("Reviews.stars")), 1),
-          "avgStarRating"
-        ],
-        [sequelize.col("SpotImages.url"), "previewImage"]
-      ]
-
-
-
-    },
-
-
-    include: [
-      {
-        model: Review,
-        attributes: [],
-        subQuery: false,
-      },
-      {
-        model: SpotImage,
-        attributes: [],
-        subQuery: false,
-      },
-    ]
+    }
   })
+  for await (let spot of spots) {
+    const reviews = await Review.findAll({
+             where: {spotId: spot.id}
+          })
+    
+          if (reviews.length) {
+             let sum = 0
+    
+             reviews.forEach((review) => {
+             sum += review.stars
+          })
+             sum = sum / reviews.length
+             spot.dataValues.AvgRatiing = sum
+          } else {
+             spot.dataValues.AvgRatiing = 0
+          }
+          const previewImages = await SpotImage.findAll({
+            where: {
+              spotid: req.user.id,
+               preview: true,
+            },
+            attributes: ["url"],
+          });
+          
+          if (previewImages.length) {
+            const image = previewImages.map((value) => value.url);
+            spot.dataValues.previewImage = image[0];
+          } else {
+            spot.dataValues.previewImage = "No Image Url";
+          }
+    }
   res.json({ Spots: spots })
 })
 
 router.get('/:spotid', requireAuth, async (req, res, next) => {
   const id = req.params.spotid;
-  const spots = await Spot.findByPk(id, {
-    attributes: {
-      include: [
-        [sequelize.fn("COUNT", sequelize.col("Reviews.spotid")),
-          "numReviews"
-        ],
-        [sequelize.fn("ROUND", sequelize.fn("AVG", sequelize.col("Reviews.stars")), 1),
-          "avgStarRating"
-        ]
-      ]
-    },
+  const spots = await Spot.findByPk(id)
+    const reviews = await Review.findAll({
+             where: {spotid: id}
+          })
+    
+          if (reviews.length) {
+             let sum = 0
+    
+             reviews.forEach((review) => {
+             sum += review.stars
+          })
+             sum = sum / reviews.length
+             spots.dataValues.AvgRating = sum
+          } else {
+             spots.dataValues.AvgRating = 0
+          }
+          const previewImages = await SpotImage.findAll({
+            where: {
+              spotid: req.user.id,
+               preview: true,
+            },
+            attributes: ["url"],
+          });
+          
+          if (previewImages.length) {
+            const image = previewImages.map((value) => value.url);
+            spots.dataValues.previewImage = image[0];
+          } else {
+            spots.dataValues.previewImage = "No Image Url";
+          }
+    
 
-
-    include: [
-      {
-        model: SpotImage,
-        attributes: ["id", "url", "preview"]
-      },
-      {
-        model: User,
-        as: "Owner",
-        attributes: ["id", "firstName", "lastName"]
-      },
-      {
-        model: Review,
-        attributes: [],
-        subQuery: false,
-      },
-    ],
-
-  })
   if (!spots.id) {
     res.status(404).json({ message: "Spot couldn't be found" })
   }

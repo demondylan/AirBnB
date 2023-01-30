@@ -92,44 +92,42 @@ router.put('/:reviewsid', requireAuth, validateReview, async (req, res, next) =>
 });
 router.get('/:spotId/reviews', async (req, res, next) => {
     const id = req.params.spotId;
-    const spots = await Spot.findByPk(id, {
-        attributes: {
-            include: [
-                [sequelize.fn("COUNT", sequelize.col("Reviews.spotid")),
-                    "numReviews"
-                ],
-                [sequelize.fn("ROUND", sequelize.fn("AVG", sequelize.col("Reviews.stars")), 1),
-                    "avgStarRating"
-                ]
-            ]
-        },
-
-
-        include: [
-            {
-                model: SpotImage,
-                attributes: ["id", "url", "preview"]
-            },
-            {
-                model: User,
-                as: "Owner",
-                attributes: ["id", "firstName", "lastName"]
-            },
-            {
-                model: Review,
-                attributes: [],
-                subQuery: false,
-            },
-        ],
-
-    })
-    if (spots.id === null) {
-        const err = new Error(`Spot Id ${id} does not exist`);
-        err.status = 404;
-        err.title = "Spot couldn't be found";
-        //  err.errors = ["Spot couldn't be found"];
-        return next(err);
-    }
+    const spots = await Spot.findAll({
+        where: {
+          spotid: id
+        }
+      })
+      for await (let spot of spots) {
+        const reviews = await Review.findAll({
+                 where: {spotId: spot.id}
+              })
+        
+              if (reviews.length) {
+                 let sum = 0
+        
+                 reviews.forEach((review) => {
+                 sum += review.stars
+              })
+                 sum = sum / reviews.length
+                 spot.dataValues.AvgRatiing = sum
+              } else {
+                 spot.dataValues.AvgRatiing = 0
+              }
+              const previewImages = await SpotImage.findAll({
+                where: {
+                  spotid: req.user.id,
+                   preview: true,
+                },
+                attributes: ["url"],
+              });
+              
+              if (previewImages.length) {
+                const image = previewImages.map((value) => value.url);
+                spot.dataValues.previewImage = image[0];
+              } else {
+                spot.dataValues.previewImage = "No Image Url";
+              }
+        }
     return res.json(spots)
 
 })

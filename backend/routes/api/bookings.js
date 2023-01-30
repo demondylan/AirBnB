@@ -30,10 +30,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const id = req.params.bookingId;
     const bookings = await Booking.findByPk(id)
     if (!bookings) {
-        const err = new Error(`Booking couldn't be found`);
-        err.status = 404;
-        err.title = "Booking id does not exist";
-        return next(err);
+        res.status(404).json({ message: "Booking couldn't be found" })
     }
 
     await bookings.update({
