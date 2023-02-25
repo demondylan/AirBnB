@@ -19,6 +19,20 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+const handleDateValidation = (req, _res, next) => {
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    const errors = validationErrors
+      .array()
+      .map((error) => `${error.msg}`);
+
+      _res.status(404).json({ message: "Validation error", status: 400, errors: errors })
+  }
+  next();
+};
+
+
 module.exports = {
-  handleValidationErrors
+  handleValidationErrors, handleDateValidation
 };

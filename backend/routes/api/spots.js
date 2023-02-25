@@ -1,8 +1,22 @@
 const express = require("express");
+<<<<<<< HEAD
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { Spot, SpotImage, User, sequelize, Review, ReviewImage, Booking } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+=======
+<<<<<<< Updated upstream
+const {setTokenCookie, requireAuth} = require("../../utils/auth");
+const {Spot, SpotImage, User, sequelize, Review} = require("../../db/models");
+const {check} = require("express-validator");
+const {handleValidationErrors} = require("../../utils/validation");
+=======
+const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const { Spot, SpotImage, User, sequelize, Review, ReviewImage, Booking } = require("../../db/models");
+const { check } = require("express-validator");
+const { handleValidationErrors, handleDateValidation } = require("../../utils/validation");
+>>>>>>> Stashed changes
+>>>>>>> dev
 const sequelized = require("sequelize");
 const { Op } = require("sequelize")
 const image = require("../../db/models/reviewimage");
@@ -18,6 +32,7 @@ const validateSpot = [
   check('city')
     .exists({ checkFalsy: true })
     .withMessage('City is required'),
+<<<<<<< HEAD
   check('state')
     .exists({ checkFalsy: true })
     .withMessage('State is required'),
@@ -53,7 +68,87 @@ const validateReview = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+=======
+<<<<<<< Updated upstream
+    check('state')
+      .exists({ checkFalsy: true })
+      .withMessage('State is required'),
+    check('country')
+      .exists({ checkFalsy: true })
+      .withMessage('Country is required'),
+    check('lat')
+      .exists({ checkFalsy: true, min: -90, max: 90  })
+      .withMessage('Latitude is not valid'),
+      check('lng')
+      .exists({ checkFalsy: true, min: -180, max: 180 })
+      .withMessage('Longitude is not valid'),
+      check('name')
+      .exists({ checkFalsy: true })
+      .isLength({ max: 49 })
+      .withMessage('Name must be less than 50 characters'),
+      check('description')
+      .exists({ checkFalsy: true })
+      .withMessage('Description is required'),
+      check('price')
+      .exists({ checkFalsy: true })
+      .withMessage('Price per day is required'),
+    handleValidationErrors
+  ];
+>>>>>>> dev
 
+=======
+  check('state')
+    .exists({ checkFalsy: true })
+    .withMessage('State is required'),
+  check('country')
+    .exists({ checkFalsy: true })
+    .withMessage('Country is required'),
+  check('lat')
+    .exists({ checkFalsy: true })
+    .withMessage('Latitude is not valid'),
+  check('lng')
+    .exists({ checkFalsy: true })
+    .withMessage('Longitude is not valid'),
+  check('name')
+    .exists({ checkFalsy: true })
+    .isLength({ max: 49 })
+    .withMessage('Name must be less than 50 characters'),
+  check('description')
+    .exists({ checkFalsy: true })
+    .withMessage('Description is required'),
+  check('price')
+    .exists({ checkFalsy: true })
+    .withMessage('Price per day is required'),
+  handleValidationErrors
+];
+
+
+const validateReview = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .withMessage('Review text is required'),
+  check('stars')
+    .exists({ checkFalsy: true, min: 1, max: 5 })
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+const validateDate = [
+check('startDate')
+      .trim()
+      .custom((startDate, { req }) => {
+          const [sy, sm, sd] = startDate.split('-')
+          const [ey, em, ed] = req.body.endDate.split('-')
+          const start = new Date(sy, sm, sd)
+          const end = new Date(ey, em, ed)
+          if (start >= end) {
+              throw new Error(
+'Start date of project must be before End date')
+          }
+          return true
+      }),
+      handleDateValidation
+    ]
+>>>>>>> Stashed changes
 router.get('/', async (req, res) => {
   let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query
   if (!page || Number.isNaN(page) || page > 10) { page = 1 }
@@ -162,6 +257,7 @@ router.get('/:spotIdForBooking/bookings', async (req, res, next) => {
     where: {
       spotid: id
     },
+<<<<<<< HEAD
     include: [
       {
         model: User,
@@ -172,20 +268,27 @@ router.get('/:spotIdForBooking/bookings', async (req, res, next) => {
 
   })
   return res.json(bookings)
-})
-
-router.get('/current', requireAuth, async (req, res) => {
-
-  const spots = await Spot.findAll({
-    where: {
-      ownerid: req.user.id
-    }
-  })
-  for await (let spot of spots) {
-    const reviews = await Review.findAll({
-             where: {spotid: spot.id}
-          })
+=======
+    {
+        model: Review,
+    attributes: [],
+    subQuery: false,
+},
+],
     
+<<<<<<< Updated upstream
+      })
+      if (spots.id === null) 
+      {
+          const err = new Error(`Spot Id ${id} does not exist`);
+          err.status = 404;
+          err.title = "Spot couldn't be found";
+        //  err.errors = ["Spot couldn't be found"];
+          return next(err);
+        }
+    res.json(spots)
+    
+=======
           if (reviews.length) {
              let sum = 0
     
@@ -250,6 +353,89 @@ router.get('/:spotid', requireAuth, async (req, res, next) => {
           } else {
             spots.dataValues.previewImage = "No Image Url";
           }
+  return res.json(spots)
+
+>>>>>>> Stashed changes
+>>>>>>> dev
+})
+
+router.get('/current', requireAuth, async (req, res) => {
+
+  const spots = await Spot.findAll({
+    where: {
+      ownerid: req.user.id
+    }
+  })
+  for await (let spot of spots) {
+    const reviews = await Review.findAll({
+             where: {spotid: spot.id}
+          })
+    
+          if (reviews.length) {
+             let sum = 0
+    
+             reviews.forEach((review) => {
+             sum += review.stars
+          })
+             sum = sum / reviews.length
+             spot.dataValues.AvgRatiing = sum
+          } else {
+             spot.dataValues.AvgRatiing = 0
+          }
+          const previewImages = await SpotImage.findAll({
+            where: {
+              spotid: req.user.id,
+               preview: true,
+            },
+            attributes: ["url"],
+          });
+          
+          if (previewImages.length) {
+            const image = previewImages.map((value) => value.url);
+            spot.dataValues.previewImage = image[0];
+          } else {
+            spot.dataValues.previewImage = "No Image Url";
+          }
+    }
+  res.json({ Spots: spots })
+})
+
+<<<<<<< HEAD
+router.get('/:spotid', requireAuth, async (req, res, next) => {
+  const id = req.params.spotid;
+  const spots = await Spot.findByPk(id)
+  if (!spots) {
+    res.status(404).json({ message: "Spot couldn't be found", status: 404 })
+  }
+    const reviews = await Review.findAll({
+             where: {spotid: id}
+          })
+          spots.dataValues.numReviews = reviews.length
+          if (reviews.length) {
+             let sum = 0
+            
+             reviews.forEach((review) => {
+             sum += review.stars
+          })
+             sum = sum / reviews.length
+             spots.dataValues.AvgRating = sum
+          } else {
+             spots.dataValues.AvgRating = 0
+          }
+          const previewImages = await SpotImage.findAll({
+            where: {
+              spotid: req.user.id,
+               preview: true,
+            },
+            attributes: ["url"],
+          });
+          
+          if (previewImages.length) {
+            const image = previewImages.map((value) => value.url);
+            spots.dataValues.previewImage = image[0];
+          } else {
+            spots.dataValues.previewImage = "No Image Url";
+          }
     
 
 
@@ -269,6 +455,28 @@ router.delete('/:spotId', async (req, res) => {
 })
 
 router.post('/', requireAuth, validateSpot, async (req, res) => {
+=======
+router.post('/', requireAuth, validateSpot, async (req, res) => {
+<<<<<<< Updated upstream
+    const { user, address, city, state, country, lat, lng, name, description, price } = req.body
+   // console.log(user)
+    
+    const newSpot = await Spot.create({
+        ownerid: req.user.id,
+       address,
+       city,
+       state,
+       country,
+       lat,
+       lng,
+       name,
+       description,
+       price
+    })
+   
+    res.json(newSpot)
+=======
+>>>>>>> dev
   const { user, address, city, state, country, lat, lng, name, description, price } = req.body
   // console.log(user)
 
@@ -312,19 +520,50 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
 
 })
 
+<<<<<<< HEAD
 router.post('/:spotIdForBooking/bookings', requireAuth, async (req, res, next) => {
   const id = req.params.spotIdForBooking;
   const { user, spotid, startDate, endDate } = req.body
+=======
+router.post('/:spotIdForBooking/bookings', requireAuth, validateDate, async (req, res, next) => {
+  const id = req.params.spotIdForBooking;
+  const { user, spotid, startDate, endDate } = req.body
+
+  const [sd, sm, sy] = startDate.split('/')
+  const [ed, em, ey] = endDate.split('/')
+
+>>>>>>> dev
   const spots = await Spot.findByPk(id)
   if (spots === null) {
     res.status(404).json({ message: "Spot couldn't be found", status: 404 })
   }
 
   const bookings = await Booking.findOne({ where: { userid: req.user.id } });
+<<<<<<< HEAD
   if (bookings != null) {
     res.status(403).json({ message: "Booking exists", status: 403 })
 
   }
+=======
+  /*if (bookings != null) {
+    res.status(403).json({ message: "Booking exists", status: 403 })
+  }*/
+ /* const booking = await Booking.findAll({ where: {
+    [Op.or]: [{
+        from: {
+            [Op.between]: [startDate, endDate]
+        }
+    }, {
+        to: {
+            [Op.between]: [startDate, endDate]
+        }
+    }]
+  }
+});
+if (booking != null) {
+  res.status(403).json({ message: "Sorry, this spot is already booked for the specified dates", status: 403 })
+}*/
+>>>>>>> dev
 
   const newBooking = await Booking.create({
     userid: req.user.id,
@@ -334,6 +573,10 @@ router.post('/:spotIdForBooking/bookings', requireAuth, async (req, res, next) =
   })
 
   return res.json(newBooking)
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> dev
 
 })
 router.post('/:spotsid/images', requireAuth, async (req, res, next) => {

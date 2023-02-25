@@ -36,6 +36,7 @@ router.get('/current', requireAuth, async (req, res) => {
             },
             {
                 model: ReviewImage,
+                required: false,
                 attributes: ["id", "url"],
                 subQuery: false,
             }
@@ -62,7 +63,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 
     const reviews = await Review.findByPk(reviewid)
     if (!reviews) {
-        res.status(403).json({ message: "User already has a review for this spot" })
+        res.status(403).json({ message: "User already has a review for this spot", status: 403 })
     }
     const newImage = await ReviewImage.create({
         reviewid: reviewid,
