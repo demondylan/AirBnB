@@ -31,7 +31,7 @@ router.get('/current', requireAuth, async (req, res) => {
             },
             {
                 model: Spot,
-                attributes: ["id", "ownerid", "address", "city", "state", "country", "lat", "lng", "name", "price"],
+                attributes: ["id", "ownerId", "address", "city", "state", "country", "lat", "lng", "name", "price"],
                 subQuery: false,
             },
             {
@@ -50,8 +50,13 @@ router.delete('/:reviewsId', async (req, res) => {
     if (!review) {
         res.status(404).json({ message: "Review couldn't be found", status: 404 })
     }
-    await review.destroy()
-    return res.json({ message: 'Successfully deleted' })
+
+    if(review.userId === req.user.id){
+        await review.destroy()
+        res.json(review)
+    }else{
+        res.status(401).json({ message: "Must be the owner to delete the review", status: 404 })
+    }
 })
 
 

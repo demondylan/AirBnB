@@ -1,3 +1,65 @@
-.hidden {
-    display: none
+.hidden{
+    visibility: hidden;
+}
+#Header {
+    position: relative;
+  border-bottom: thin solid gray;
+  height: 75px;
+
+}
+
+.Logo {
+    float: left;
+    height: 75px;
+    width: 75px; 
+}
+#userCorner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2%;
+    justify-content: flex-end;
+    position: relative;
+}
+.bars {
+    display: flex;
+    gap: 10%;
+    position:relative;
+
+}
+.userIcon {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2%;
+    float: right;
+    width: 50px;
+    position: relative;
+}
+
+ul.profile-dropdown {
+    background-color: white;
+    font-size: 12px;
+    font-style: italic;
+    color: black;
+    position: relative;
+   right: 40px;
+   padding-inline-start: 0px;
+   bottom: 10px;
+    text-decoration: none;
+    display: block;
+    border: 3px solid black;
+    width: 100px;
+    list-style-type: none
+}
+
+.dropDown {
+    position: relative;
+    display: inline-block;
+    max-width: 60px;
+}
+.dropdownButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }

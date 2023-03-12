@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Review.belongsTo(models.Spot, {
-        foreignKey: 'userid'
+        foreignKey: 'userid',
+         onDelete:"CASCADE"
       })
       Review.belongsTo(models.User, {
         foreignKey: 'spotid'
@@ -22,15 +23,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Review.init({
-    userid: DataTypes.INTEGER,
-    spotid: DataTypes.INTEGER,
-    review: DataTypes.STRING,
+    userid: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    spotid: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    review: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     stars: {
       type: DataTypes.INTEGER,
-      validate: {
-        min: 1,
-        max: 5
-      }
+      allowNull: false
     }
   },
     {

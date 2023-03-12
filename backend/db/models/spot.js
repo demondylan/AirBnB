@@ -20,13 +20,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "spotid"
       })
       Spot.belongsTo(models.User, {
-        foreignKey: "ownerid",
+        foreignKey: "ownerId",
         as: "Owner"
       })
     }
   }
   Spot.init({
-    ownerid: DataTypes.INTEGER,
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: false
@@ -45,18 +48,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.FLOAT,
-      allowNull: false
     },
     lng: {
       type: DataTypes.FLOAT,
-      allowNull: false
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        max: 49
-      }
+      allowNull: false
     },
     description: {
       type: DataTypes.STRING,

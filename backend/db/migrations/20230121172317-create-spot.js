@@ -13,9 +13,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ownerid: {
+      ownerId: {
         type: Sequelize.INTEGER,
-        reference: { model: "Users" }
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id"
+        },
+        onDelete:"CASCADE"
       },
       address: {
         type: Sequelize.STRING,
@@ -34,19 +39,17 @@ module.exports = {
         allowNull: false
       },
       lat: {
-        type: Sequelize.FLOAT,
-        allowNull: false
+        type: Sequelize.FLOAT
       },
       lng: {
-        type: Sequelize.FLOAT,
-        allowNull: false
+        type: Sequelize.FLOAT
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false
       },
       description: {
-        type: Sequelize.STRING(),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       price: {

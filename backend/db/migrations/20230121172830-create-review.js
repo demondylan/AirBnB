@@ -8,28 +8,36 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Reviews', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
       userid: {
         type: Sequelize.INTEGER,
-        reference: { model: "Users" }
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id"
+        },
+        onDelete:"CASCADE"
       },
       spotid: {
         type: Sequelize.INTEGER,
-        reference: { model: "Spots" }
+        allowNull: false,
+        references: {
+          model: "Spots",
+          key: "id"
+        },
+        onDelete:"CASCADE"
       },
       review: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       stars: {
         type: Sequelize.INTEGER,
-        validate: {
-          min: 1,
-          max: 5
-        }
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
