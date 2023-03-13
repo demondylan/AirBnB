@@ -21,18 +21,18 @@ module.exports = {
         stars: 5,
       },
       {
-        userid: 2,
+        userid: 3,
+        spotid: 2,
+        review: "Delicious",
+        stars: 5,
+      }, {
+        userid: 1,
         spotid: 2,
         review: "Best Breakfast Around!",
         stars: 5,
       }, {
-        userid: 2,
-        spotid: 2,
-        review: "Best Breakfast Around!",
-        stars: 5,
-      }, {
-        userid: 2,
-        spotid: 2,
+        userid: 1,
+        spotid: 3,
         review: "Best Breakfast Around!",
         stars: 5,
       },

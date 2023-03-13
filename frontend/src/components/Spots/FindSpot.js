@@ -19,7 +19,7 @@ const FindSpot = () => {
   const spot = useSelector((state) => state.spots);
   const sessionUser = useSelector((state) => state.session.user)
   let reviews = useSelector((state) => state.reviews)
-  console.log(sessionUser)
+
   useEffect(() => {
     dispatch(spotActions.getSpot(spotId)).then(dispatch(reviewActions.getAllReviews(spotId))).then(() => setIsLoaded(true))
   }, [dispatch, spotId])
@@ -55,11 +55,11 @@ const FindSpot = () => {
                     )}
                      Number of Reviews{spot.totalReviews}
           <h1>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h1>
-          {(!sessionUser || sessionUser.id !== spot.ownerId) && (<OpenMenu
+          {sessionUser && (sessionUser.id !== spot.ownerId && (<OpenMenu
                 itemText="Post Your Review"
                 onItemClick={closeMenu}
                 modalComponent={<PostReview spotId={spotId}/>}
-                />)}
+                />))}
         </div>
         )
         }
