@@ -45,14 +45,14 @@ const FindSpot = () => {
 ))
 }
 
-{sessionUser && {reviews.map(review => sessionUser.id === review.userid && (<OpenMenu
+{sessionUser && reviews.map(review => sessionUser.id === review.userid && (<OpenMenu
                     itemText="Delete"
                     onItemClick={closeMenu}
                     modalComponent={<DeleteReview reviewId={review.id} spotId={spot.id}/>}
                     />)
           
                
-                    )}}
+                    )}
                      Number of Reviews{spot.totalReviews}
           <h1>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h1>
           {(!sessionUser || sessionUser.id !== spot.ownerId) && (<OpenMenu
