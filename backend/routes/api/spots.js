@@ -104,7 +104,7 @@ router.get('/', async (req, res, next) => {
     offset: (page - 1) * size,
   })
   spots.forEach(spot => {
-    spot.SpotImage.forEach(image => {
+    spot.SpotImages.forEach(image => {
       if (image.dataValues.previewImage) {
         spot.dataValues.previewImage = image.url
       }

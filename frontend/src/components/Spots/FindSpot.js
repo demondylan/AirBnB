@@ -33,7 +33,7 @@ const FindSpot = () => {
       <div className="currentSpot">
         {isLoaded && (<div>
           <h1>{spot.name}</h1>
-          {spot.SpotImage.map(image => {
+          {spot.SpotImages.map(image => {
           if(image.url !== "")
          return <img src={image.url} alt="" />})}
           <h2>{spot.city},{spot.state},{spot.country}</h2>
