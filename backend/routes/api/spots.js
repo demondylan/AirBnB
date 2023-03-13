@@ -104,11 +104,11 @@ router.get('/', async (req, res, next) => {
     offset: (page - 1) * size,
   })
   spots.forEach(spot => {
-    spot.SpotImages.forEach(image => {
+    spot.SpotImage.forEach(image => {
       if (image.dataValues.previewImage) {
         spot.dataValues.previewImage = image.url
       }
-      delete spot.dataValues.SpotImages
+      delete spot.dataValues.SpotImage
     })
       let sum = 0
         spot.Reviews.forEach(review => {
@@ -198,7 +198,7 @@ router.get('/current', requireAuth, async (req, res) => {
     }
     const previewImages = await SpotImage.findAll({
       where: {
-        spotid: req.user.id,
+        spotId: req.user.id,
         preview: true,
       },
       attributes: ["url"],
