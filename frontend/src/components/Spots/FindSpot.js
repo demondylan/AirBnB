@@ -10,7 +10,7 @@ import './Spots.css';
 
 
 const FindSpot = () => {
-  // eslint-disable-next-line
+
   const [showMenu, setShowMenu] = useState(false);
   const closeMenu = () => setShowMenu(false);
   const { spotId } = useParams();
@@ -19,13 +19,13 @@ const FindSpot = () => {
   const spot = useSelector((state) => state.spots);
   const sessionUser = useSelector((state) => state.session.user)
   let reviews = useSelector((state) => state.reviews)
-
+  console.log(sessionUser)
   useEffect(() => {
     dispatch(spotActions.getSpot(spotId)).then(dispatch(reviewActions.getAllReviews(spotId))).then(() => setIsLoaded(true))
   }, [dispatch, spotId])
-
   reviews = Object.values(reviews)
   const spotReviews = reviews.filter(review => review.spotId === Number(spotId))
+  
 
   
   return (
@@ -37,18 +37,25 @@ const FindSpot = () => {
           if(image.url !== "")
          return <img src={image.url} alt="" />})}
           <h2>{spot.city},{spot.state},{spot.country}</h2>
-          {spotReviews.reverse().map(review => 
-                    <div>{review.review} 
-                    {!sessionUser || sessionUser.id === review.userId && (<OpenMenu
+
+          {/* // <div>{review.review} </div> */}
+          {reviews.map((spot) => (<div key={spot.id}>
+<p>{spot.stars}</p>
+<p>{spot.review}</p></div>
+))
+}
+
+          {reviews.map(review => sessionUser.id === review.userid && (<OpenMenu
                     itemText="Delete"
                     onItemClick={closeMenu}
                     modalComponent={<DeleteReview reviewId={review.id} spotId={spot.id}/>}
-                    />)}
-                    </div>
+                    />)
+          
+               
                     )}
-                     Number of Reviews{spot.numReviews}
+                     Number of Reviews{spot.totalReviews}
           <h1>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</h1>
-          {!sessionUser || sessionUser.id !== spot.ownerId && (<OpenMenu
+          {(!sessionUser || sessionUser.id !== spot.ownerId) && (<OpenMenu
                 itemText="Post Your Review"
                 onItemClick={closeMenu}
                 modalComponent={<PostReview spotId={spotId}/>}

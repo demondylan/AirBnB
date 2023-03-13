@@ -51,7 +51,7 @@ router.delete('/:reviewsId', async (req, res) => {
         res.status(404).json({ message: "Review couldn't be found", status: 404 })
     }
 
-    if(review.userId === req.user.id){
+    if(review.userid === req.user.id){
         await review.destroy()
         res.json(review)
     }else{

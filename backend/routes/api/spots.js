@@ -230,11 +230,15 @@ router.get('/:spotid', async (req, res, next) => {
     res.status(404).json({ message: "Spot couldn't be found", status: 404 })
   }
   let sum = 0
+  let count = 0
   spots.Reviews.forEach(review => {
     sum += review.dataValues.stars
+    count++
   })
+
   sum = sum/spots.Reviews.length
   spots.dataValues.avgRating = sum
+  spots.dataValues.totalReviews = count
 delete spots.dataValues.Reviews
   return res.json(spots)
 })
@@ -280,7 +284,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
   }
 
   const reviews = await Review.findAll({ where: { [Op.and]: [{ userId: req.user.id }, { spotId: req.params.spotId }] } })
-  if (reviews.length) {
+  if (reviews) {
     res.status(403).json({ message: "Review exists", status: 403 })
   } else {
 
