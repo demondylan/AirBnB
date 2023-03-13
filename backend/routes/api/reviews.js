@@ -100,12 +100,12 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     const id = req.params.spotId;
     const spots = await Spot.findAll({
         where: {
-          spotid: id
+          id: id
         }
       })
       for await (let spot of spots) {
         const reviews = await Review.findAll({
-                 where: {spotId: spot.id}
+                 where: {spotid: spot.id}
               })
         
               if (reviews.length) {

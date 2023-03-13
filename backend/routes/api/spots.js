@@ -283,7 +283,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
     res.status(404).json({ message: "Spot couldn't be found", status: 404 })
   }
 
-  const reviews = await Review.findAll({ where: { [Op.and]: [{ userId: req.user.id }, { spotId: req.params.spotId }] } })
+  const reviews = await Review.findAll({ where: { [Op.and]: [{ userId: req.user.id }, { spotid: req.params.spotId }] } })
   if (reviews) {
     res.status(403).json({ message: "Review exists", status: 403 })
   } else {

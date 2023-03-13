@@ -25,7 +25,7 @@ router.get('/current', requireAuth, async (req, res) => {
     for await (let review of reviews) {
     const previewImages = await SpotImage.findAll({
         where: {
-          spotid: req.user.id,
+          spotId: req.user.id,
            preview: true,
         },
         attributes: ["url"],

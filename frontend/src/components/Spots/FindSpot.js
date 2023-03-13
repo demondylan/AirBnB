@@ -24,7 +24,7 @@ const FindSpot = () => {
     dispatch(spotActions.getSpot(spotId)).then(dispatch(reviewActions.getAllReviews(spotId))).then(() => setIsLoaded(true))
   }, [dispatch, spotId])
   reviews = Object.values(reviews)
-  const spotReviews = reviews.filter(review => review.spotId === Number(spotId))
+  const spotReviews = reviews.filter(review => review.spotid === Number(spotId))
   
 
   
