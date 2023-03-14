@@ -15,8 +15,8 @@ function DeleteReview(reviewId, spotId) {
         e.preventDefault();
         let spot = reviewId.spotId
         return dispatch(reviewActions.deleteReview(reviewId.reviewId))
-        .then(dispatch(spotActions.getSpot(spotId)))
-            .then(dispatch(reviewActions.getAllReviews(reviewId.spotId)))
+        .then(dispatch(spotActions.getSpot(reviewId.spotId)))
+         //   .then(dispatch(reviewActions.getAllReviews(reviewId.spotId)))
             .then(closeModal)
             .catch(
         );

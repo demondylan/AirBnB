@@ -25,11 +25,11 @@ const addReview = (review) => {
 }
 
 export const newReview = (reviewData) => async dispatch =>{
-    let {review, stars, spotId} = reviewData
-    
-    spotId = Number(spotId.spotId)
+    let {review, stars, spotid} = reviewData
+    console.log(spotid)
+    spotid = Number(spotid.spotId)
 
-    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+    const response = await csrfFetch(`/api/spots/${spotid}/reviews`, {
         method:'POST',
         body: JSON.stringify({review, stars})
     })
@@ -44,6 +44,7 @@ const deletedReview = (reviewId) => {
     return{
         type: DELETED_REVIEW,
         reviewId
+        
     }
 }
 
@@ -70,7 +71,7 @@ const reviewReducer = (state = {}, action) => {
             return newState
         case DELETED_REVIEW:
             newState = {...state}
-            delete newState[action.reviewId]
+            delete newState[action.reviewId.id]
             return newState
         default:
             return state

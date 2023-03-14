@@ -96,8 +96,8 @@ router.put('/:reviewsid', requireAuth, validateReview, async (req, res, next) =>
     return res.json(reviews)
 
 });
-router.get('/:spotId/reviews', async (req, res, next) => {
-    const id = req.params.spotId;
+router.get('/:spotid/reviews', async (req, res, next) => {
+    const id = req.params.spotid;
     const spots = await Spot.findAll({
         where: {
           id: id

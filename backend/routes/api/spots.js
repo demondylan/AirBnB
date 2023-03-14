@@ -125,8 +125,8 @@ router.get('/', async (req, res, next) => {
     size = parseInt(size)
   res.json(spots)
 })
-router.get('/:spotsId/reviews', async (req, res, next) => {
-  const id = req.params.spotsId;
+router.get('/:spotsid/reviews', async (req, res, next) => {
+  const id = req.params.spotsid;
   const spot = await Spot.findByPk(id)
   if (!spot) {
     res.status(404).json({ message: "Spot couldn't be found", status: 404 })
@@ -276,15 +276,15 @@ router.post('/', requireAuth, validateSpot, async (req, res, next) => {
   return res.json(newSpot)
 
 })
-router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, next) => {
-  const id = req.params.spotId;
+router.post('/:spotid/reviews', requireAuth, validateReview, async (req, res, next) => {
+  const id = req.params.spotid;
   const spots = await Spot.findByPk(id)
   if (spots === null) {
     res.status(404).json({ message: "Spot couldn't be found", status: 404 })
   }
 
-  const reviews = await Review.findAll({ where: { [Op.and]: [{ userId: req.user.id }, { spotid: req.params.spotId }] } })
-  if (reviews) {
+  const reviews = await Review.findAll({ where: { [Op.and]: [{ userid: req.user.id }, { spotid: id }] } })
+  if (reviews.length > 0) {
     res.status(403).json({ message: "Review exists", status: 403 })
   } else {
 
@@ -292,7 +292,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
 
   const newReview = await Review.create({
     userid: req.user.id,
-    spotid: Number(req.params.spotId),
+    spotid: Number(req.params.spotid),
     review: review,
     stars: stars
   })

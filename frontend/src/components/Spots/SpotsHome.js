@@ -24,7 +24,7 @@ function SpotsHome() {
           <div className="allspots">
           <NavLink to={`/spots/${spot.id}`}>
             <img src={spot.previewImage} alt="" />
-           <div className="city"> <p>{spot.city},{spot.state}</p><p>{Math.round(`${spot.avgRating}` / .10) * .10} STARS</p></div>
+           <div className="city"> <p>{spot.city},{spot.state}</p><p>{!spot.avgRating ? "No Stars" : Math.round(`${spot.avgRating}` / .10) * .10} STARS</p></div>
            <div className="price"> <p><span>${spot.price}</span> night</p></div>
           </NavLink>
           </div>
